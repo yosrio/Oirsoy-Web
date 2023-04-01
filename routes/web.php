@@ -14,17 +14,10 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('dashboard', [AuthController::class, 'dashboard']); 
+Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::get('dashboard', [AuthController::class, 'dashboard']);
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('login', [AuthController::class, 'customLogin'])->name('login.custom');
 Route::get('register', [AuthController::class, 'register'])->name('register');
-Route::post('register', [AuthController::class, 'customRegister'])->name('register.custom'); 
-Route::get('signout', [AuthController::class, 'signOut'])->name('signout');
-
-// Route::get('/', function () {
-//     return view('index');
-// });
-
-// Route::get('/dashboard', function () {
-//     return view('backoffice/dashboard/index');
-// });
+Route::post('register', [AuthController::class, 'customRegister'])->name('register.custom');
+Route::get('logout', [AuthController::class, 'logOut'])->name('logout');
