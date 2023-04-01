@@ -19,27 +19,35 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function dashboard()
+    {
+        if(Auth::check()){
+            $user = Auth::user();
+            return view('backoffice.dashboard.index', ['user' => $user]);
+        }
+   
+        return redirect("login")->withSuccess('You are not allowed to access');
+    }
+    
+    public function register()
+    {
+        return view('auth.register');
+    }
+
     public function customLogin(Request $request)
     {
-        Log::info('test');
         $request->validate([
             'email' => 'required',
             'password' => 'required',
         ]);
     
         $credentials = $request->only('email', 'password');
-        Log::info(Auth::attempt($credentials));
         if (Auth::attempt($credentials)) {
             return redirect()->intended('dashboard')
                         ->withSuccess('Signed in');
         }
         
         return redirect("login")->withSuccess('Login details are not valid');
-    }
-
-    public function register()
-    {
-        return view('auth.register');
     }
 
     public function customRegister(Request $request)
@@ -51,9 +59,7 @@ class AuthController extends Controller
         ]);
 
         $data = $request->all();
-        Log::info($data);
         $check = $this->create($data);
-        Log::info($check);
 
         return redirect("dashboard")->withSuccess('You have signed-in');
     }
@@ -67,16 +73,7 @@ class AuthController extends Controller
       ]);
     }
 
-    public function dashboard()
-    {
-        if(Auth::check()){
-            return view('backoffice.dashboard.index');
-        }
-   
-        return redirect("login")->withSuccess('You are not allowed to access');
-    }
-
-    public function signOut() {
+    public function logOut() {
         Session::flush();
         Auth::logout();
 
