@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,6 @@ Route::post('login', [AuthController::class, 'customLogin'])->name('login.custom
 Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('register', [AuthController::class, 'customRegister'])->name('register.custom');
 Route::get('logout', [AuthController::class, 'logOut'])->name('logout');
+
+Route::get('profile', [ProfileController::class, 'index'])->name('profile');
+Route::post('profile/updateProfile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
