@@ -44,7 +44,7 @@
 						</a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="" id="rolesMenu" name="rolesMenu">
+						<a class="sidebar-link" href="{{ route('roles') }}" id="rolesMenu" name="rolesMenu">
 							<i class="align-middle" data-feather="user-check"></i> <span class="align-middle">Roles</span>
 						</a>
 					</li>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RolesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,9 @@ Route::get('users/add', [UserController::class, 'addOrUpdate'])->name('user.add'
 Route::post('users', [UserController::class, 'save'])->name('user.save');
 Route::get('users/update/{id}', [UserController::class, 'addOrUpdate'])->name('user.update');
 Route::get('users/{id}', [UserController::class, 'delete'])->name('user.delete');
+
+Route::get('roles', [RolesController::class, 'index'])->name('roles');
+Route::get('roles/add', [RolesController::class, 'addOrUpdate'])->name('roles.add');
+Route::post('roles', [RolesController::class, 'save'])->name('roles.save');
+Route::get('roles/update/{id}', [RolesController::class, 'addOrUpdate'])->name('roles.update');
+Route::get('roles/{id}', [RolesController::class, 'delete'])->name('roles.delete');
