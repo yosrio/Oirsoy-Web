@@ -27,27 +27,22 @@
 					<span class="align-middle">Backoffice</span>
 				</a>
 				<ul class="sidebar-nav" id="sidebarMenu">
-					<li class="sidebar-header">
-						Pages
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('dashboard') }}" id="dashboardMenu" name="dashboardMenu">
-							<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-						</a>
-					</li>
-					<li class="sidebar-header">
-						Admin
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('users') }}" id="usersMenu" name="usersMenu">
-							<i class="align-middle" data-feather="users"></i> <span class="align-middle">Users</span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('roles') }}" id="rolesMenu" name="rolesMenu">
-							<i class="align-middle" data-feather="user-check"></i> <span class="align-middle">Roles</span>
-						</a>
-					</li>
+					<?php foreach ($sidebar as $item) : ?>
+						<li class="sidebar-header">
+							<?php echo $item->header; ?>
+							<?php $menuItem = json_decode($item->item, 1); ?>
+							<?php foreach ($menuItem['items'] as $menu) : ?>
+								<li class="sidebar-item">
+									<a class="sidebar-link" href="{{ route($menu['route']) }}" 
+									id="{{ $menu['menu_id'] }}" 
+									name="{{ $menu['menu_id'] }}">
+										<i class="align-middle" data-feather="{{ $menu['feather'] }}"></i> 
+										<span class="align-middle">{{ $menu['menu_title'] }}</span>
+									</a>
+								</li>
+							<?php endforeach; ?>
+						</li>
+				<?php endforeach; ?>
 				</ul>
 			</div>
 		</nav>
