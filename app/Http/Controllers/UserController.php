@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use App\Models\Roles;
+use App\Models\Sidebar;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +24,7 @@ class UserController extends Controller
 
         $user = Auth::user();
         $users = User::all();
-        return view('backoffice.users.index', ['user' => $user, 'users' => $users]);
+        return view('backoffice.users.index', ['user' => $user, 'users' => $users, 'sidebar' => Sidebar::get()]);
     }
     public function addOrUpdate($id = null)
     {
@@ -38,11 +39,12 @@ class UserController extends Controller
             return view('backoffice.users.edit', [
                 'user' => $user,
                 'userSelected' => $userSelected,
-                'roles' => $roles
+                'roles' => $roles,
+                'sidebar' => Sidebar::get()
             ]);
         }
 
-        return view('backoffice.users.edit', ['user' => $user, 'roles' => $roles]);
+        return view('backoffice.users.edit', ['user' => $user, 'roles' => $roles, 'sidebar' => Sidebar::get()]);
     }
 
     public function save(Request $request)

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
+use App\Models\Sidebar;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +21,7 @@ class ProfileController extends Controller
         }
         
         $user = Auth::user();
-        return view('backoffice.profile.index', ['user' => $user]);
+        return view('backoffice.profile.index', ['user' => $user, 'sidebar' => Sidebar::get()]);
     }
 
     public function updateProfile(Request $request)
