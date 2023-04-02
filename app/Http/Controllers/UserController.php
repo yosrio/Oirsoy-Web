@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
+use App\Models\Roles;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -31,12 +32,17 @@ class UserController extends Controller
         }
 
         $user = Auth::user();
+        $roles = Roles::all();
         if ($id != null) {
             $userSelected = User::find($id);
-            return view('backoffice.users.edit', ['user' => $user, 'userSelected' => $userSelected]);
+            return view('backoffice.users.edit', [
+                'user' => $user,
+                'userSelected' => $userSelected,
+                'roles' => $roles
+            ]);
         }
 
-        return view('backoffice.users.edit', ['user' => $user]);
+        return view('backoffice.users.edit', ['user' => $user, 'roles' => $roles]);
     }
 
     public function save(Request $request)
@@ -95,6 +101,9 @@ class UserController extends Controller
             $successMessage = 'Successfully Add User.';
             $failedMessage = 'Something went wrong. Failed to add user!';
         }
+
+        $roles = Roles::find($request->role_id);
+        $user->role_id = $roles->id;
 
         try {
             if ($user->save()) {

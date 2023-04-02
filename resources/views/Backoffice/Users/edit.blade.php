@@ -18,7 +18,7 @@
             <i data-feather="arrow-left" style="cursor: pointer;"></i>
         </a>
         <span class="badge" style="color: #222E3C;">
-            <?php echo(isset($userSelected) ? 'Edit User' : 'Add User') ?>
+            <?php echo (isset($userSelected) ? 'Edit User' : 'Add User') ?>
         </span>
     </h2>
     <div class="row justify-content-center border border-white rounded" style="background-color: white;">
@@ -33,6 +33,7 @@
                     @error('name')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="email">Email</span>
                         <input type="email" class="form-control" id="email" name="email" aria-label="Email" value="<?php echo (isset($userSelected) ? $userSelected->email : '') ?>">
@@ -40,6 +41,28 @@
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="roles">Roles</span>
+                        <select class="form-select" id="role_id" name="role_id" aria-label="Roles select">
+                            <option disabled selected>Please select role</option>
+                            <?php foreach ($roles as $role) : ?>
+                                <?php if (isset($userSelected) && ($userSelected->role_id == $role->id)) : ?>
+                                    <option value="<?php echo $role->id; ?>" selected>
+                                        <?php echo $role->name; ?>
+                                    </option>
+                                <?php else : ?>
+                                    <option value="<?php echo $role->id; ?>">
+                                        <?php echo $role->name; ?>
+                                    </option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    @error('email')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="password">Password</span>
                         <input class="form-control password" id="password" class="block mt-1 w-full" type="password" name="password" <?php echo (isset($userSelected) ? '' : 'required') ?> />
@@ -50,6 +73,7 @@
                     @error('password')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
                     <pre>
                     <input type="hidden" name="id" value="<?php echo (isset($userSelected) ? $userSelected->id : '') ?>" />
 					<div class="d-grid gap-2">
