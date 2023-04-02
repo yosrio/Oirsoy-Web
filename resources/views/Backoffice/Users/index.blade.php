@@ -19,28 +19,39 @@
 	</div>
 
 	<div class="row justify-content-center border rounded">
-			<div class="col" style="margin: 2%;">
-		<table id="usersTable" class="table table-striped" style="width:100%">
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Created At</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($users as $item) : ?>
+		<div class="col" style="margin: 2%;">
+			<table id="usersTable" class="table table-striped" style="width:100%">
+				<thead>
 					<tr>
-						<th scope="row"><?php echo $item->id; ?></th>
-						<td><?php echo $item->name; ?></td>
-						<td><?php echo $item->email; ?></td>
-						<td><?php echo $item->created_at; ?></td>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Created At</th>
+						<th>Actions</th>
 					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-			</div>
+				</thead>
+				<tbody>
+					<?php foreach ($users as $item) : ?>
+						<tr>
+							<th scope="row"><?php echo $item->id; ?></th>
+							<td><?php echo $item->name; ?></td>
+							<td><?php echo $item->email; ?></td>
+							<td><?php echo $item->created_at; ?></td>
+							<td>
+								<a href="{{ route('user.update', $item->id) }}">
+									<i data-feather="edit" style="cursor: pointer;"></i>
+								</a> 
+								&nbsp;&nbsp;&nbsp;
+								<a href="{{ route('user.delete', $item->id) }}">
+								<i data-feather="trash-2" style="cursor: pointer;"></i>
+								</a>
+							</td>
+						</tr>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 

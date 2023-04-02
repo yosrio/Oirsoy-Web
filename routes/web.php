@@ -28,5 +28,7 @@ Route::get('profile', [ProfileController::class, 'index'])->name('profile');
 Route::post('profile/updateProfile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 
 Route::get('users', [UserController::class, 'index'])->name('users');
-Route::get('users/addUser', [UserController::class, 'addUser'])->name('user.add');
+Route::get('users/add', [UserController::class, 'addOrUpdate'])->name('user.add');
 Route::post('users', [UserController::class, 'save'])->name('user.save');
+Route::get('users/update/{id}', [UserController::class, 'addOrUpdate'])->name('user.update');
+Route::get('users/{id}', [UserController::class, 'delete'])->name('user.delete');

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class UserController extends Controller
 
     public function index()
     {
-        if(!Auth::check()){
+        if (!Auth::check()) {
             return view('auth.login');
         }
 
@@ -23,28 +24,28 @@ class UserController extends Controller
         $users = User::all();
         return view('backoffice.users.index', ['user' => $user, 'users' => $users]);
     }
-    public function addUser($id = null)
+    public function addOrUpdate($id = null)
     {
-        if(!Auth::check()){
+        if (!Auth::check()) {
             return view('auth.login');
         }
 
+        $user = Auth::user();
         if ($id != null) {
             $userSelected = User::find($id);
-            return view('backoffice.users.edit', ['userSelected' => $userSelected]);
+            return view('backoffice.users.edit', ['user' => $user, 'userSelected' => $userSelected]);
         }
 
-        $user = Auth::user();
         return view('backoffice.users.edit', ['user' => $user]);
     }
 
     public function save(Request $request)
     {
+        $successMessage = '';
+        $failedMessage = '';
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email:rfc,dns|unique:users,email',  
-            'newPassword' => 'required',
-            'confirmNewPassword' => 'required_with:newPassword|same:newPassword'
+            'email' => 'required|email:rfc,dns'
         ]);
 
         if ($validator->fails()) {
@@ -53,21 +54,70 @@ class UserController extends Controller
 
         if ($request->id) {
             $user = User::find($request->id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            if ($request->password) {
+                $validator = Validator::make($request->all(), [
+                    'password' => [
+                        'min:8',
+                        'max:64',
+                        'regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,64}$/'
+                    ]
+                ]);
+    
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+                $user->password = Hash::make($request->password);
+            }
+            $successMessage = 'Successfully Update User.';
+            $failedMessage = 'Something went wrong. Failed to update user!';
         } else {
             $user = new User;
+
+            $validator = Validator::make($request->all(), [
+                'password' => [
+                    'required',
+                    'min:8',
+                    'max:64',
+                    'regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,64}$/'
+                ],
+                'email' => 'required|email:rfc,dns|unique:users,email',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $successMessage = 'Successfully Add User.';
+            $failedMessage = 'Something went wrong. Failed to add user!';
         }
-        
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->newPassword);
 
         try {
             if ($user->save()) {
-                return redirect(route('users'))->with('success', 'Successfully Add User.');
+                return redirect(route('users'))->with('success', $successMessage);
             }
         } catch (\Throwable $th) {
-            return redirect(route('user.add'))->with('error', 'Something went wrong. Failed to add user!');
+            return redirect(route('user.add'))->with('error', $failedMessage);
         }
     }
+
+    public function delete($id)
+    {
+        $loggedUser = Auth::user();
+        $user = User::find($id);
+
+        if ($loggedUser->id == $user->id) {
+            return redirect(route('users'))->with('error', 'Cannot delete the user you are currently using!');
+        }
+
+        if ($user->delete()) {
+            return redirect(route('users'))->with('success', 'Successfully delete user.');
+        }
+
+        return redirect(route('users'))->with('error', 'Failed delete user.');
+    }
 }
-?>
