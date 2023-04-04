@@ -24,7 +24,8 @@ class UserController extends Controller
 
         $user = Auth::user();
         $users = User::all();
-        return view('backoffice.users.index', ['user' => $user, 'users' => $users, 'sidebar' => Sidebar::get()]);
+        $userRoles = Roles::where('id',$user->role_id)->first();
+        return view('backoffice.users.index', ['user' => $user, 'users' => $users, 'sidebar' => Sidebar::get(), 'userRoles' => $userRoles]);
     }
     public function addOrUpdate($id = null)
     {
@@ -34,17 +35,19 @@ class UserController extends Controller
 
         $user = Auth::user();
         $roles = Roles::all();
+        $userRoles = Roles::where('id',$user->role_id)->first();
         if ($id != null) {
             $userSelected = User::find($id);
             return view('backoffice.users.edit', [
                 'user' => $user,
                 'userSelected' => $userSelected,
                 'roles' => $roles,
-                'sidebar' => Sidebar::get()
+                'sidebar' => Sidebar::get(),
+                'userRoles' => $userRoles
             ]);
         }
 
-        return view('backoffice.users.edit', ['user' => $user, 'roles' => $roles, 'sidebar' => Sidebar::get()]);
+        return view('backoffice.users.edit', ['user' => $user, 'roles' => $roles, 'sidebar' => Sidebar::get(), 'userRoles' => $userRoles]);
     }
 
     public function save(Request $request)

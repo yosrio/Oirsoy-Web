@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
+use App\Models\Sidebar;
+use App\Models\Roles;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -23,7 +25,12 @@ class AuthController extends Controller
     {
         if(Auth::check()){
             $user = Auth::user();
-            return view('backoffice.dashboard.index', ['user' => $user]);
+            $userRoles = Roles::where('id',$user->role_id)->first();
+            return view('backoffice.dashboard.index', [
+                'user' => $user,
+                'sidebar' => Sidebar::get(),
+                'userRoles' => $userRoles
+            ]);
         }
    
         return redirect("login")->withSuccess('You are not allowed to access');

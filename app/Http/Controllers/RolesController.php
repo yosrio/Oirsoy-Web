@@ -24,8 +24,16 @@ class RolesController extends Controller
 
         $user = Auth::user();
         $roles = Roles::all();
-        return view('backoffice.roles.index', ['user' => $user, 'roles' => $roles, 'sidebar' => Sidebar::get()]);
+        $userRoles = Roles::where('id',$user->role_id)->first();
+
+        return view('backoffice.roles.index', [
+            'user' => $user,
+            'roles' => $roles,
+            'sidebar' => Sidebar::get(),
+            'userRoles' => $userRoles
+        ]);
     }
+
     public function addOrUpdate($id = null)
     {
         if (!Auth::check()) {
@@ -33,96 +41,73 @@ class RolesController extends Controller
         }
 
         $user = Auth::user();
+        $userRoles = Roles::where('id',$user->role_id)->first();
         if ($id != null) {
-            $userSelected = User::find($id);
-            return view('backoffice.users.edit', ['user' => $user, 'userSelected' => $userSelected, 'sidebar' => Sidebar::get()]);
+            $roleSelected = Roles::find($id);
+            return view('backoffice.roles.edit', [
+                'user' => $user,
+                'roleSelected' => $roleSelected,
+                'sidebar' => Sidebar::get(),
+                'userRoles' => $userRoles
+            ]);
         }
 
-        return view('backoffice.users.edit', ['user' => $user]);
+        return view('backoffice.roles.edit', ['user' => $user, 'sidebar' => Sidebar::get(), 'userRoles' => $userRoles]);
     }
 
     public function save(Request $request)
     {
-        $successMessage = '';
-        $failedMessage = '';
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email:rfc,dns'
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        $sidebar = Sidebar::get();
+        $user = Auth::user();
+        $totalMenuSidebar = 0;
+        foreach ($sidebar as $menu) {
+            $menuItems = json_decode($menu->item, 1);
+            $totalMenuSidebar += count($menuItems['items']);
         }
 
+        $menuList = array_filter($request->menu_list, 'strlen');
+        $totalRolesMenu = count($menuList);
+        
+        $result = [];
+        foreach ($menuList as $value) {
+            $array = explode("_", $value);
+            if (array_key_exists($array[0],$result)) {
+                array_push($result[$array[0]], $array[1]);
+            } else {
+                $result[$array[0]] = array($array[1]);
+            }
+        }
+        $result = json_encode($result);
+        
         if ($request->id) {
-            $user = User::find($request->id);
-            $user->name = $request->name;
-            $user->email = $request->email;
-            if ($request->password) {
-                $validator = Validator::make($request->all(), [
-                    'password' => [
-                        'min:8',
-                        'max:64',
-                        'regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,64}$/'
-                    ]
-                ]);
-    
-                if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput();
-                }
-                $user->password = Hash::make($request->password);
-            }
-            $successMessage = 'Successfully Update User.';
-            $failedMessage = 'Something went wrong. Failed to update user!';
+            $roles = Roles::find($request->id);
+            $roles->name = $request->name;
+            $roles->permission = $result;
         } else {
-            $user = new User;
-
-            $validator = Validator::make($request->all(), [
-                'password' => [
-                    'required',
-                    'min:8',
-                    'max:64',
-                    'regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,64}$/'
-                ],
-                'email' => 'required|email:rfc,dns|unique:users,email',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $successMessage = 'Successfully Add User.';
-            $failedMessage = 'Something went wrong. Failed to add user!';
+            $roles = new Roles;
+            $roles->name = $request->name;
+            $roles->permission = $result;
         }
+        $roles->save();
 
-        $roles = Roles::find(1);
-        $user->role_id = $roles->id;
-
-        try {
-            if ($user->save()) {
-                return redirect(route('users'))->with('success', $successMessage);
-            }
-        } catch (\Throwable $th) {
-            return redirect(route('user.add'))->with('error', $failedMessage);
-        }
+        $roles = Roles::all();
+        $userRoles = Roles::where('id',$user->role_id)->first();
+        return view('backoffice.roles.index', [
+            'user' => $user,
+            'roles' => $roles,
+            'sidebar' => Sidebar::get(),
+            'userRoles' => $userRoles
+        ]);
     }
 
     public function delete($id)
     {
-        $loggedUser = Auth::user();
-        $user = User::find($id);
+        $roles = Roles::find($id);
 
-        if ($loggedUser->id == $user->id) {
-            return redirect(route('users'))->with('error', 'Cannot delete the user you are currently using!');
+        if ($roles->delete()) {
+            return redirect(route('roles'))->with('success', 'Successfully delete roles.');
         }
 
-        if ($user->delete()) {
-            return redirect(route('users'))->with('success', 'Successfully delete user.');
-        }
-
-        return redirect(route('users'))->with('error', 'Failed delete user.');
+        return redirect(route('roles'))->with('error', 'Failed delete roles.');
     }
 }

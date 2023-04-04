@@ -28,20 +28,30 @@
 				</a>
 				<ul class="sidebar-nav" id="sidebarMenu">
 					<?php foreach ($sidebar as $item) : ?>
+						<?php
+							$permission = json_decode($userRoles['permission'], 1);
+							if (!array_key_exists(strtolower($item->header), $permission)) {
+								continue;
+							}
+						?>
 						<li class="sidebar-header">
 							<?php echo $item->header; ?>
 							<?php $menuItem = json_decode($item->item, 1); ?>
 							<?php foreach ($menuItem['items'] as $menu) : ?>
-								<li class="sidebar-item">
-									<a class="sidebar-link" href="{{ route($menu['route']) }}" 
-									id="{{ $menu['menu_id'] }}" 
-									name="{{ $menu['menu_id'] }}">
-										<i class="align-middle" data-feather="{{ $menu['feather'] }}"></i> 
-										<span class="align-middle">{{ $menu['menu_title'] }}</span>
-									</a>
-								</li>
-							<?php endforeach; ?>
+								<?php
+									$permissionItem = $permission[strtolower($item->header)];
+									if (!in_array($menu['menu_id'], $permissionItem)) {
+										continue;
+									}
+								?>
+						<li class="sidebar-item">
+							<a class="sidebar-link" href="{{ route($menu['route']) }}" id="{{ $menu['menu_id'] }}" name="{{ $menu['menu_id'] }}">
+								<i class="align-middle" data-feather="{{ $menu['feather'] }}"></i>
+								<span class="align-middle">{{ $menu['menu_title'] }}</span>
+							</a>
 						</li>
+					<?php endforeach; ?>
+					</li>
 				<?php endforeach; ?>
 				</ul>
 			</div>
