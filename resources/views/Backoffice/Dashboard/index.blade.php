@@ -6,8 +6,7 @@
 		Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
 		semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien
 		ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi.
-		Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a
-			href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
+		Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
 	<h2>Header Level 2</h2>
 	<ol>
 		<li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
@@ -31,4 +30,10 @@
 		}
 	</code></pre>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+	$(this.hash).show().siblings().hide();
+	$('#sidebarMenu').find('a').parent().removeClass('active');
+	$("#dashboardMenu").parent().addClass('active');
+</script>
 @endsection
