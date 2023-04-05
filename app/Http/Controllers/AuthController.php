@@ -5,8 +5,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
-use App\Models\Sidebar;
-use App\Models\Roles;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -16,7 +14,7 @@ class AuthController extends Controller
     public function index()
     {
         if(Auth::check()){
-            return redirect("dashboard");
+            return redirect(route('dashboard'));
         }
         return view('auth.login');
     }
@@ -24,16 +22,10 @@ class AuthController extends Controller
     public function dashboard()
     {
         if(Auth::check()){
-            $user = Auth::user();
-            $userRoles = Roles::where('id',$user->role_id)->first();
-            return view('backoffice.dashboard.index', [
-                'user' => $user,
-                'sidebar' => Sidebar::get(),
-                'userRoles' => $userRoles
-            ]);
+            return view('backoffice.dashboard.index');
         }
    
-        return redirect("login")->withSuccess('You are not allowed to access');
+        return redirect(route("login"))->withSuccess('You are not allowed to access');
     }
     
     public function register()
@@ -50,11 +42,11 @@ class AuthController extends Controller
     
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard')
+            return redirect()->intended(route('dashboard'))
                         ->withSuccess('Signed in');
         }
         
-        return redirect("login")->withSuccess('Login details are not valid');
+        return redirect(route("login"))->withSuccess('Login details are not valid');
     }
 
     public function customRegister(Request $request)
@@ -68,7 +60,7 @@ class AuthController extends Controller
         $data = $request->all();
         $check = $this->create($data);
 
-        return redirect("dashboard")->withSuccess('You have signed-in');
+        return redirect(route("dashboard"))->withSuccess('You have signed-in');
     }
 
     public function create(array $data)
@@ -84,7 +76,7 @@ class AuthController extends Controller
         Session::flush();
         Auth::logout();
 
-        return Redirect('login');
+        return Redirect(route('login'));
     }
 }
 ?>

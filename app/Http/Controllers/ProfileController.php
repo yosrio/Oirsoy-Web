@@ -5,8 +5,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
-use App\Models\Sidebar;
-use App\Models\Roles;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -21,9 +19,7 @@ class ProfileController extends Controller
             return view('auth.login');
         }
         
-        $user = Auth::user();
-        $userRoles = Roles::where('id',$user->role_id)->first();
-        return view('backoffice.profile.index', ['user' => $user, 'sidebar' => Sidebar::get(),'userRoles' => $userRoles]);
+        return view('backoffice.profile.index');
     }
 
     public function updateProfile(Request $request)

@@ -29,20 +29,20 @@
 				<ul class="sidebar-nav" id="sidebarMenu">
 					<?php foreach ($sidebar as $item) : ?>
 						<?php
-							$permission = json_decode($userRoles['permission'], 1);
-							if (!array_key_exists(strtolower($item->header), $permission)) {
-								continue;
-							}
+						$permission = json_decode($userRoles['permission'], 1);
+						if (!array_key_exists(strtolower($item->header), $permission)) {
+							continue;
+						}
 						?>
 						<li class="sidebar-header">
 							<?php echo $item->header; ?>
 							<?php $menuItem = json_decode($item->item, 1); ?>
 							<?php foreach ($menuItem['items'] as $menu) : ?>
 								<?php
-									$permissionItem = $permission[strtolower($item->header)];
-									if (!in_array($menu['menu_id'], $permissionItem)) {
-										continue;
-									}
+								$permissionItem = $permission[strtolower($item->header)];
+								if (!in_array($menu['menu_id'], $permissionItem)) {
+									continue;
+								}
 								?>
 						<li class="sidebar-item">
 							<a class="sidebar-link" href="{{ route($menu['route']) }}" id="{{ $menu['menu_id'] }}" name="{{ $menu['menu_id'] }}">
@@ -90,6 +90,11 @@
 	</div>
 
 	<script src="{{ asset('admin/dist/js/app.js') }}"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+	<script src="{{ asset('main/js/app.js') }}"></script>
 </body>
 
 </html>

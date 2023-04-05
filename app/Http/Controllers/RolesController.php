@@ -22,16 +22,8 @@ class RolesController extends Controller
             return view('auth.login');
         }
 
-        $user = Auth::user();
         $roles = Roles::all();
-        $userRoles = Roles::where('id',$user->role_id)->first();
-
-        return view('backoffice.roles.index', [
-            'user' => $user,
-            'roles' => $roles,
-            'sidebar' => Sidebar::get(),
-            'userRoles' => $userRoles
-        ]);
+        return view('backoffice.roles.index', ['roles' => $roles]);
     }
 
     public function addOrUpdate($id = null)
@@ -40,19 +32,12 @@ class RolesController extends Controller
             return view('auth.login');
         }
 
-        $user = Auth::user();
-        $userRoles = Roles::where('id',$user->role_id)->first();
         if ($id != null) {
             $roleSelected = Roles::find($id);
-            return view('backoffice.roles.edit', [
-                'user' => $user,
-                'roleSelected' => $roleSelected,
-                'sidebar' => Sidebar::get(),
-                'userRoles' => $userRoles
-            ]);
+            return view('backoffice.roles.edit', ['roleSelected' => $roleSelected]);
         }
 
-        return view('backoffice.roles.edit', ['user' => $user, 'sidebar' => Sidebar::get(), 'userRoles' => $userRoles]);
+        return view('backoffice.roles.edit');
     }
 
     public function save(Request $request)
@@ -91,13 +76,7 @@ class RolesController extends Controller
         $roles->save();
 
         $roles = Roles::all();
-        $userRoles = Roles::where('id',$user->role_id)->first();
-        return view('backoffice.roles.index', [
-            'user' => $user,
-            'roles' => $roles,
-            'sidebar' => Sidebar::get(),
-            'userRoles' => $userRoles
-        ]);
+        return view('backoffice.roles.index', ['roles' => $roles]);
     }
 
     public function delete($id)

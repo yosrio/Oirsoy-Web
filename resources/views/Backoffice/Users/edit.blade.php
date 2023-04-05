@@ -87,20 +87,6 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
-    $(".togglePassword").click(function(e) {
-        e.preventDefault();
-        var type = $(this).parent().parent().find(".password").attr("type");
-        if (type == "password") {
-            $(this).removeClass("fa-eye-slash");
-            $(this).addClass("fa-eye");
-            $(this).parent().parent().find(".password").attr("type", "text");
-        } else if (type == "text") {
-            $(this).removeClass("fa-eye");
-            $(this).addClass("fa-eye-slash");
-            $(this).parent().parent().find(".password").attr("type", "password");
-        }
-    });
-
     $(this.hash).show().siblings().hide();
     $('#sidebarMenu').find('a').parent().removeClass('active');
     $("#usersMenu").parent().addClass('active');
