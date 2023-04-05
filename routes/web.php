@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\RolesController;
+use App\Http\Controllers\Backoffice\AuthController;
+use App\Http\Controllers\Backoffice\ProfileController;
+use App\Http\Controllers\Backoffice\UserController;
+use App\Http\Controllers\Backoffice\RolesController;
 
 /*
 |--------------------------------------------------------------------------
