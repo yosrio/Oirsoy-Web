@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\User;
+use App\Models\Sidebar;
+use App\Models\Roles;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Default data
+        view()->composer('*', function ($view) {
+            if (Auth::check()) {
+                $user = Auth::user();
+                $userRoles = Roles::where('id', $user->role_id)->first();
+                $sidebar = Sidebar::get();
+                $view
+                    ->with('user', $user)
+                    ->with('sidebar', $sidebar)
+                    ->with('userRoles', $userRoles);
+            }
+        });
     }
 }
