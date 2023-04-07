@@ -8,11 +8,11 @@
 	<meta name="author" content="Oirsoy">
 
 	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link rel="shortcut icon" href="{{ asset('admin/dist/img/icons/icon-48x48.png') }}" />
+	<link rel="shortcut icon" href="{{ asset('adminAssets/dist/img/icons/icon-48x48.png') }}" />
 
 	<title>Backoffice</title>
 
-	<link href="{{ asset('admin/dist/css/app.css') }}" rel="stylesheet">
+	<link href="{{ asset('adminAssets/dist/css/app.css') }}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
@@ -89,7 +89,7 @@
 		</div>
 	</div>
 
-	<script src="{{ asset('admin/dist/js/app.js') }}"></script>
+	<script src="{{ asset('adminAssets/dist/js/app.js') }}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 	<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>

@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('backoffice.layouts.default')
 @section('content')
 <div class="container">
 	@if (session('success'))
