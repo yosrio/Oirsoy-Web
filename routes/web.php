@@ -5,6 +5,7 @@ use App\Http\Controllers\Backoffice\AuthController;
 use App\Http\Controllers\Backoffice\ProfileController;
 use App\Http\Controllers\Backoffice\UserController;
 use App\Http\Controllers\Backoffice\RolesController;
+use App\Http\Controllers\Backoffice\ConfigurationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ use App\Http\Controllers\Backoffice\RolesController;
 |
 */
 
-Route::get('admin/', [AuthController::class, 'index'])->name('login');
+Route::get('admin', [AuthController::class, 'index'])->name('login');
 Route::get('admin/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 Route::get('admin/login', [AuthController::class, 'index'])->name('login');
 Route::post('admin/login', [AuthController::class, 'customLogin'])->name('login.custom');
@@ -39,3 +40,5 @@ Route::get('admin/roles/add', [RolesController::class, 'addOrUpdate'])->name('ro
 Route::post('admin/roles', [RolesController::class, 'save'])->name('roles.save');
 Route::get('admin/roles/update/{id}', [RolesController::class, 'addOrUpdate'])->name('roles.update');
 Route::get('admin/roles/{id}', [RolesController::class, 'delete'])->name('roles.delete');
+
+Route::get('admin/configuration', [ConfigurationController::class, 'index'])->name('config');

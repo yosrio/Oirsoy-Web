@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('backoffice.layouts.default')
 @section('content')
 <div>
 	<h1>HTML Ipsum Presents</h1>

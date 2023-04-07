@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('backoffice.layouts.default')
 @section('content')
 <div class="container">
     @if (session('success'))
@@ -18,7 +18,7 @@
             <i data-feather="arrow-left" style="cursor: pointer;"></i>
         </a>
         <span class="badge" style="color: #222E3C;">
-            <?php echo ('Add Roles') ?>
+            <?php echo (isset($roleSelected) ? 'Edit Role' : 'Add Role') ?>
         </span>
     </h2>
     <div class="row justify-content-center border border-white rounded" style="background-color: white;">
