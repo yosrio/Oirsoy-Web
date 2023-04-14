@@ -12,5 +12,6 @@ class Sidebar extends Model
     protected $fillable = [
         'header',
         'item',
+        'sort_order',
     ];
 }

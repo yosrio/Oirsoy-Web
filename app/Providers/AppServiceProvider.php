@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             if (Auth::check()) {
                 $user = Auth::user();
                 $userRoles = Roles::where('id', $user->role_id)->first();
-                $sidebar = Sidebar::get();
+                $sidebar = Sidebar::orderBy('sort_order')->get();
                 $view
                     ->with('user', $user)
                     ->with('sidebar', $sidebar)
